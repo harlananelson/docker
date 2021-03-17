@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>start.html</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+
+</head>
+
+<body>
+
+<h1 id="use-of-docker">Use of Docker</h1>
+<dl>
+<dt>Purpose</dt>
+<dd>Explain the use of Docker
+</dd>
+<dt>Reference</dt>
+<dd><a href="https://docs.docker.com/engine/security/rootless/">rootless docker</a>
+</dd>
+</dl>
+<h2 id="required-installation">Required Installation</h2>
+<h3 id="file-permissions">File Permissions</h3>
+<p>When running <code>docker</code>, it needs the ability to run code and access files your userid or groupid have access to even though <code>docker</code> is an isolated container. This access is granted using <code>newuidmap</code> and <code>newgidmap</code>. This accomplishes something similar to <code>SETUID</code> and <code>SETGID</code>.</p>
+<p>The package <code>uidmap</code> should be installed and provide the commands <code>newuidmap</code> and <code>newgidmap</code></p>
+<p>Install the package <code>uidmap</code>, which should provide <code>newuidmap</code> and <code>newgidmap</code>.</p>
+<pre><code>apt-get install uidmap</code></pre>
+<p>The following command checks the number of subordiinate UID/GIDs available for the user: needs to be at least 65,536</p>
+<pre><code>id -u</code></pre>
+<pre><code>whoami</code></pre>
+<pre><code>grep ^$(whoami) /etc/subuid</code></pre>
+<pre><code>grep ^$(whoami) /etc/subgid</code></pre>
+<p>Check to see of dockerd is alread installed.</p>
+<pre><code>ls /usr/bin/dockerd-rootless-setuptool.sh</code></pre>
+<p>If it is not found, you can install</p>
+<pre><code> sudo apt-get install -y docker-ce-rootless-extras</code></pre>
+<p>This is a use case of starting a rootless rstudio docker using Ubuntu 20.11.</p>
+<p>Start Docker</p>
+<pre><code>systemctl --user start docker</code></pre>
+<p>You can also enable docker</p>
+<pre><code>systemctl --user enable docker</code></pre>
+<p>Specify the socket</p>
+<pre><code>export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock</code></pre>
+<p>Start RStudio</p>
+<p>The code as given by <a href="https://www.rocker-project.org/">rocker-project</a></p>
+<pre><code>docker run -e PASSWORD=yourpassword --rm -p 8787:8787 rocker/rstudio</code></pre>
+<p>The code I usually run.</p>
+<pre><code>docker run -v &quot;$(pwd)&quot;:healtheintents:rocker/rstudio -e PASSWORD=aPogee --rm -p 8787:8787 rocker/rstudio</code></pre>
+<p>Point your browser to <a href="localhost:8787">rstudio instance</a></p>
+
+</body>
+</html>
