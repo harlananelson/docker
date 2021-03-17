@@ -88,14 +88,14 @@ The code as given by [rocker-project](https://www.rocker-project.org/)
 docker run -e PASSWORD=yourpassword --rm -p 8787:8787 rocker/rstudio
 ```
 
-The code I usually run.
+## The code I usually run.
 
+This code will make the current directory, the directory you are in when you launch the 
+code below, available in RStudio and start the RStudio docker
 ```
 docker run -v "$(pwd)":healtheintents:rocker/rstudio -e PASSWORD=aPogee --rm -p 8787:8787 rocker/rstudio
 ```
-```
-docker run -v "$(pwd)":/home/rstudio/healtheintent -e PASSWORD=aPogee --rm -p 8787:8787 rocker/rstudio
-```
+
 Point your browser to [rstudio instance](localhost:8787)
 
 
